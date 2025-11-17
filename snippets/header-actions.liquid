@@ -18,13 +18,18 @@
     <a
       href="{{ routes.cart_url }}"
       class="header-actions__action action__cart"
-      aria-label="{{ 'accessibility.cart' | t }}"
-      aria-describedby="cart-bubble-text"
+      aria-label="{{ 'accessibility.cart' | t }} {{ 'accessibility.cart_count' | t }}: {{ cart.item_count }}"
     >
       {% render 'cart-icon-component' %}
     </a>
   {% endif %}
+
+    {% render 'hulkapps-wishlist-header-icon' %}
+
 </header-actions>
+
+
+
 
 {% stylesheet %}
   .cart-drawer {

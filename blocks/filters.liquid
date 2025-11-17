@@ -78,15 +78,15 @@
       class="facets facets--horizontal facets-controls-wrapper spacing-style"
       style="{% render 'spacing-style', settings: block_settings %}{% if block_settings.text_label_case == 'uppercase' %} --facet-label-transform: uppercase;{% endif %}"
     >
-      {% if block_settings.enable_filtering %}
+      {% comment %} {% if block_settings.enable_filtering %}
         <h4 class="facets--filters-title">{{ 'content.filters' | t }}</h4>
-      {% endif %}
+      {% endif %} {% endcomment %}
 
-      <div class="products-count-wrapper">
+      {% comment %} <div class="products-count-wrapper">
         <span title="{{ 'content.product_count' | t }}">
           {{- 'content.item_count' | t: count: products_count -}}
         </span>
-      </div>
+      </div> {% endcomment %}
 
       {% if block_settings.enable_sorting %}
         {% render 'sorting',
@@ -134,6 +134,10 @@
       style="{% render 'spacing-style', settings: block_settings %}{% if block_settings.text_label_case == 'uppercase' %} --facet-label-transform: uppercase;{% endif %}"
       aria-label="{{ 'accessibility.filters' | t }}"
     >
+      <div class="product-refine">
+        <h3 class="title">Refine</h3>
+        <p class="product-count">Showing {{ products_count }} products</p>
+      </div>
       <facets-form-component
         class="facets__form-wrapper"
         section-id="{{ section.id }}"
@@ -330,7 +334,6 @@
       class="facets facets--drawer dialog-modal drawer dialog-drawer dialog-drawer--right spacing-style"
       style="{% render 'spacing-style', settings: block_settings %}"
       scroll-lock
-      aria-labelledby="filters-drawer-heading"
     >
       {% assign form_component = 'FacetFiltersFormComponent--' | append: section.id | append: '-overflow' %}
 
@@ -349,10 +352,7 @@
             class="facets__title-wrapper"
             style="--color-shadow: rgb(var(--color-foreground-rgb) / var(--opacity-10-25));"
           >
-            <h2
-              id="filters-drawer-heading"
-              class="facets-drawer__title h3"
-            >
+            <h2 class="facets-drawer__title h3">
               {{ 'blocks.filter' | t }}
 
               {% if total_active_values > 0 %}
@@ -678,7 +678,7 @@
       --variant-picker-swatch-height: 26px;
     }
 
-    font-size: var(--font-h5--size);
+    font-size: var(--font-h4--size);
     display: flex;
     justify-content: space-between;
 
@@ -994,6 +994,7 @@
   .facets-drawer__title {
     --variant-picker-swatch-width: 32px;
     --variant-picker-swatch-height: 32px;
+
     margin: 0;
     display: flex;
     align-items: center;

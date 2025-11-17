@@ -1,0 +1,479 @@
+{% style %}
+  .step-container {
+    max-width: 100%;
+    background: #fff;
+    padding: 30px 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .step { display: none; }
+    .step.active { display: block; }
+    .enquiry-form .buttons { display: flex; justify-content: space-between; margin-top: 20px; }
+    .enquiry-form button { background: #c50984; border: none; padding: 10px 30px; color: #fff; border-radius: 25px; cursor: pointer; }
+    .enquiry-form input, .enquiry-form select {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    }
+    .enquiry-form label {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+.form-progress {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  gap: 10px;
+}
+.step-container .step .field-group {
+    display: flex;
+    gap: 20px;
+}
+.step-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    color: #474747;
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    justify-content: center;
+    margin: 0 auto 10px;
+    transition: background-color 0.3s ease;
+}
+.form-progress .progress-step span {
+    max-width: 110px;
+    display: flex;
+    text-align: center;
+}
+.form-progress .progress-step.completed .step-circle {
+    background-color: #c50984;
+    color: #fff;
+    position: relative;
+    font-size: 0;
+}
+.form-progress .progress-step.completed .step-circle::before {
+  content: "✓";
+  font-size: 16px;
+}
+.form-progress .progress-step.active .step-circle {
+  border: 2px solid #c50984;
+  color: #c50984;
+}
+.form-progress .progress-step {
+    position: relative;
+    z-index: 0;
+}
+.form-progress .progress-step:last-child:before{
+    content: none;
+}
+.form-progress .progress-step:before {
+  content: '';
+  position: absolute;
+  width: calc(100% + 75px);
+  height: 2px;
+  background: #ccc;
+  top: 15px;
+  left: 50%;
+  z-index: -1;
+  transition: background 0.4s ease;
+}
+.form-progress .progress-step.completed:before {
+  background: #c50984;
+}
+.error-message {
+  display: block;
+  margin-top: 3px;
+}
+.step-container .step .field-group .field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+.step-container .step .field-group .field .tel-field span.num {
+    position: absolute;
+    display: flex;
+    top: 32px;
+    gap: 4px;
+    padding-left: 5px;
+    line-height: 20px;
+}
+.step-container .step .field-group .field .tel-field img {
+    width: 20px;
+    border-radius: 5px;
+}
+.enquiry-form input[type="tel"] {
+    padding-left: 52px;
+}
+.enquiry-form input[type=number]::-webkit-outer-spin-button,
+.enquiry-form input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.enquiry-form label span {
+    color: red;
+    padding-left: 2px;
+}
+.enquiry-form input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+@media screen and (min-width:1440px){
+    .enquiry-sec .section-heading .heading {
+       font-size: 40px;
+        line-height: 65px;
+    }
+}
+
+@media screen and (min-width:751px) and (max-width:992px){
+    .enquiry-sec .inner-wrapper {
+        gap: 30px;
+    }
+    .step-circle {
+        width: 25px;
+        height: 25px;
+        font-size: 12px;
+        line-height: 1;
+    }
+    .form-progress .progress-step span {
+        max-width: 80px;
+        font-size: 10px;
+    }
+    .form-progress .progress-step:before {
+        width: calc(100% + 40px);
+        top: 12px;
+    }
+    .form-progress {
+        margin-bottom: 20px;
+    }
+    .step-container {
+        padding: 20px 15px;
+    }
+    .step-container .step .field-group {
+        gap: 10px;
+    }
+    .step-container .step .field-group .field {
+        margin-bottom: 10px;
+    }
+    .enquiry-form label {
+        font-size: 12px;
+    }
+    .enquiry-form input, .enquiry-form select {
+        padding: 8px 10px;
+        font-size: 10px;
+    }
+    .step-container .step .field-group .field .tel-field span.num {
+        top: 27px;
+        font-size: 10px;
+    }
+    .step-container .step .field-group .field .tel-field img {
+        width: 16px;
+    }
+    .enquiry-form input[type="tel"] {
+        padding-left: 42px;
+    }
+    .enquiry-form .buttons {
+        margin-top: 10px;
+    }
+    .enquiry-form button {
+        padding: 8px 30px;
+        font-size: 12px;
+    }
+}
+
+@media screen and (max-width:750px){
+    .enquiry-sec .inner-wrapper {
+        gap: 30px;
+        flex-direction: column;
+    }
+    .enquiry-sec .inner-wrapper .image-wrapper, .enquiry-sec .inner-wrapper .form-wrapper {
+        width: 100%;
+    }
+    .form-progress .progress-step:before {
+        width: calc(100% + 10px);
+    }
+    .step-container .step .field-group {
+        flex-wrap: wrap;
+    }
+    .step-container .step .field-group .field {
+        width: 100%;
+    }
+    .step-container .step .field-group {
+        gap: 5px;
+    }
+    .step-container .step .field-group .field .tel-field span.num {
+        top: 34px;
+    }
+    .enquiry-form button {
+        font-size: 16px;
+    }
+}
+{% endstyle %}
+
+
+<div class="enquiry-form">
+
+    {% assign form_id = block.id | default: section.id | prepend: 'EnquiryForm-' %}
+
+    {%- form 'contact', id: form_id, class: 'enquiry-form__form' -%}
+        
+    <div class="form-progress">
+        <div class="progress-step active">
+            <div class="step-circle">1</div>
+            <span>Personal Information</span>
+        </div>
+        <div class="progress-step">
+            <div class="step-circle">2</div>
+            <span>Location Details</span>
+        </div>
+        <div class="progress-step">
+            <div class="step-circle">3</div>
+            <span>Proposed Shop Details</span>
+        </div>
+    </div>
+    <div class="step-container">
+
+        <!-- Step 1 -->
+        <div class="step active" id="step1">
+            <div class="field-group">
+                <div class="field col-12">
+                    <label for="ContactForm-name">Full name<span aria-hidden="true">*</span>:</label>
+                    <input type="text" id="ContactForm-name" class=contact-form__input" autocomplete="name" name="contact[name]" value="{{ form.name }}" required>
+                </div>
+            </div>
+
+            <div class="field-group">
+                <div class="field col-6">
+                    <label for="ContactForm-phone">Phone<span aria-hidden="true">*</span>:</label>
+                    <div class="tel-field">
+                        <span class="num">
+                            <img src="https://cdn.shopify.com/s/files/1/0681/9604/0891/files/flag.svg?v=1762699218"/>
+                            +91
+                        </span>
+                        <input type="tel" id="ContactForm-phone" class="contact-form__input" autocomplete="tel" name="contact[phone]" pattern="[0-9\-]*" value="{{ form.phone }}" required>
+                    </div>
+                </div>
+                <div class="field col-6">
+                    <label for="ContactForm-email">Email<span aria-hidden="true">*</span>:</label>
+                    <input type="email" id="ContactForm-email" class="contact-form__input" autocomplete="email" name="contact[email]" spellcheck="false" autocapitalize="off" value="{{ form.email }}" aria-required="true" {% if form.errors contains 'email' %} aria-invalid="true" aria-describedby="ContactForm-email-error" {% endif %} required>
+                </div>
+            </div>
+
+            <div class="field-group">
+                <div class="field col-6">
+                    <label for="ContactForm-name">Interested City<span aria-hidden="true">*</span>:</label>
+                    <input type="text" id="ContactForm-interested_city" class="contact-form__input" autocomplete="city" name="contact[interested_city]" value="{{ form.interested_city }}" required>
+                </div>
+                <div class="field col-6">
+                    <label for="ContactForm-name">Interested State<span aria-hidden="true">*</span>:</label>
+                    <input type="text" id="ContactForm-interested_state" class="contact-form__input" autocomplete="state" name="contact[interested_state]" value="{{ form.interested_state }}" required>
+                </div>
+            </div>
+            <div class="buttons">
+                <span></span>
+                <button type="button" onclick="nextStep(2)">Next</button>
+            </div>
+
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step" id="step2">
+            
+            <div class="field-group">
+                <div class="field col-6">
+                    <label for="ContactForm-name">Full Address<span aria-hidden="true">*</span></label>
+                    <input type="text" id="ContactForm-address" class="contact-form__input" autocomplete="address" name="contact[address]" value="{{ form.address }}" required>
+                </div>
+                <div class="field col-6">
+                    <label for="ContactForm-name">Nearest Landmark<span aria-hidden="true">*</span>:</label>
+                    <input type="text" id="ContactForm-landmark" class="contact-form__input" autocomplete="landmark" name="contact[landmark]" value="{{ form.landmark }}" required>
+                </div>
+            </div>
+
+            <div class="field-group">
+                <div class="field col-6">
+                    <label for="ContactForm-name">State<span aria-hidden="true">*</span></label>
+                    <input type="text" id="ContactForm-state" class="contact-form__input" autocomplete="state" name="contact[state]" value="{{ form.state }}" required>
+                </div>
+                <div class="field col-6">
+                    <label for="ContactForm-name">District<span aria-hidden="true">*</span>:</label>
+                    <input type="text" id="ContactForm-district" class="contact-form__input" autocomplete="district" name="contact[district]" value="{{ form.district }}" required>
+                </div>
+            </div>
+            
+            <div class="field-group">
+                <div class="field col-6">
+                    <label for="ContactForm-name">Ward Number</label>
+                    <input type="number" id="ContactForm-ward" class="contact-form__input" autocomplete="ward" name="contact[ward_number]" value="{{ form.ward_number }}">
+                </div>
+                <div class="field col-6">
+                    <label for="ContactForm-name">Pincode<span aria-hidden="true">*</span>:</label>
+                    <input type="number" id="ContactForm-pincode" class="contact-form__input" autocomplete="pincode" name="contact[pincode]" value="{{ form.pincode }}" required>
+                </div>
+            </div>
+
+            <div class="field-group">
+                <div class="field col-12">
+                    <label for="ContactForm-name">Municipality/Panchayat<span aria-hidden="true">*</span>:</label>
+                    <input type="text" id="ContactForm-municipality" class="contact-form__input" autocomplete="municipality" name="contact[municipality]" value="{{ form.municipality }}" required>
+                </div>
+            </div>
+            
+            <div class="buttons">
+                <button type="button" onclick="prevStep(1)">Previous</button>
+                <button type="button" onclick="nextStep(3)">Next</button>
+            </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step" id="step3">
+            
+            <div class="field-group">
+                <div class="field col-6">
+                    <label for="ContactForm-name">Carpet Area (In Sq.Ft)<span aria-hidden="true">*</span>:</label>
+                    <input type="number" id="ContactForm-carpet_area" class="contact-form__input" autocomplete="area" name="contact[carpet_area]" value="{{ form.carpet_area }}" required>
+                </div>
+                <div class="field col-6">
+                    <label for="ContactForm-name">Length (in FT)<span aria-hidden="true">*</span>:</label>
+                    <input type="number" id="ContactForm-length" class="contact-form__input" autocomplete="length" name="contact[length]" value="{{ form.length }}" required>
+                </div>
+            </div>
+
+            <div class="field-group">
+                <div class="field col-6">
+                    <label for="ContactForm-name">Breadth (in FT) (Frontage)<span aria-hidden="true">*</span>:</label>
+                    <input type="number" id="ContactForm-breadth" class="contact-form__input" autocomplete="breadth" name="contact[breadth]" value="{{ form.breadth }}" required>
+                </div>
+                <div class="field col-6">
+                    <label for="ContactForm-name">Height (in FT)<span aria-hidden="true">*</span>:</label>
+                    <input type="number" id="ContactForm-heigth" class="contact-form__input" autocomplete="height" name="contact[heigth]" value="{{ form.height }}" required>
+                </div>
+            </div>
+            
+            <div class="field-group">
+                <div class="field col-12">
+                    <label for="ContactForm-name">Ownership/ rental<span aria-hidden="true">*</span>:</label>
+                    <input type="text" id="ContactForm-ownership" class="contact-form__input" autocomplete="ownership" name="contact[ownership]" value="{{ form.ownership }}" required>
+                </div>
+            </div>
+            
+            <div class="buttons">
+                <button type="button" onclick="prevStep(2)">Previous</button>
+                <button type="submit">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    {%- if form.errors -%}
+        <div class="contact-form__error" tabindex="-1" autofocus>
+            {{- 'icon-error.svg' | inline_asset_content -}}
+
+            {{- form.errors.translated_fields.email | capitalize }}
+            {{ form.errors.messages.email -}}
+        </div>
+        {%- endif -%}
+
+        {%- if form.posted_successfully? -%}
+        <div class="contact-form__success" tabindex="-1" autofocus>
+            {{- 'icon-checkmark.svg' | inline_asset_content -}}
+            {{- 'blocks.contact_form.post_success' | t -}}
+        </div>
+    {%- endif -%}
+    {%- endform -%}
+</div>
+
+<script>
+function updateProgress(step) {
+  const steps = document.querySelectorAll('.progress-step');
+  steps.forEach((s, i) => {
+    s.classList.remove('active', 'completed');
+    if (i < step - 1) s.classList.add('completed');
+    if (i === step - 1) s.classList.add('active');
+  });
+}
+
+function showError(field, message) {
+  removeError(field);
+  const error = document.createElement('small');
+  error.className = 'error-message';
+  error.style.color = 'red';
+  error.style.fontSize = '12px';
+  error.textContent = message;
+  field.style.border = '1px solid red';
+  field.parentNode.appendChild(error);
+}
+
+function removeError(field) {
+  field.style.border = '1px solid #ddd';
+  const existingError = field.parentNode.querySelector('.error-message');
+  if (existingError) existingError.remove();
+}
+
+function validateField(field) {
+  const value = field.value.trim();
+  const type = field.getAttribute('type');
+  removeError(field);
+
+  if (!value) {
+    showError(field, 'This field is required.');
+    return false;
+  }
+
+  if (type === 'email') {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(value)) {
+      showError(field, 'Enter a valid email address.');
+      return false;
+    }
+  }
+
+  if (type === 'tel') {
+    const phonePattern = /^[0-9]{10}$/;
+    if (!phonePattern.test(value)) {
+      showError(field, 'Enter a valid 10-digit phone number.');
+      return false;
+    }
+  }
+
+  if (type === 'number') {
+    if (isNaN(value) || value <= 0) {
+      showError(field, 'Enter a valid number.');
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function validateStep(stepNumber) {
+  const currentStep = document.getElementById('step' + stepNumber);
+  const requiredFields = currentStep.querySelectorAll('[required]');
+  let valid = true;
+
+  requiredFields.forEach(field => {
+    if (!validateField(field)) valid = false;
+  });
+
+  return valid;
+}
+
+function nextStep(step) {
+  const currentStep = step - 1;
+  if (!validateStep(currentStep)) return;
+
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step' + step).classList.add('active');
+  updateProgress(step);
+}
+
+function prevStep(step) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step' + step).classList.add('active');
+  updateProgress(step);
+}
+</script>

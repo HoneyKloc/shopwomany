@@ -73,33 +73,26 @@
           <facet-status-component
             class="facets__status"
             facet-type="list"
-            data-filter-style="{{ filter_style }}"
           >
             <span
-              {% if filter_style == 'horizontal' %}
-                {% if active_value_count > 1 %}
-                  class="bubble facets__bubble"
-                {% endif %}
-              {% else %}
-                {% if active_value_count > 0 %}
-                  class="bubble facets__bubble"
-                {% endif %}
+              {% if active_value_count > 1 %}
+                class="bubble facets__bubble"
               {% endif %}
               hide-when-empty
               ref="facetStatus"
             >
               {%- liquid
-                if filter_style == 'horizontal' and active_value_count == 1
+                if active_value_count == 1
                   echo filter.active_values[0].label
-                elsif active_value_count > 0
+                elsif active_value_count > 1
                   echo active_value_count
                 endif
               -%}
             </span>
           </facet-status-component>
         {% endif %}
-        <span class="svg-wrapper icon-caret icon-animated">
-          {{- 'icon-caret.svg' | inline_asset_content -}}
+        <span class="svg-wrapper icon-plus icon-animated">
+          {{- 'icon-plus.svg' | inline_asset_content -}}
         </span>
       </div>
     </summary>

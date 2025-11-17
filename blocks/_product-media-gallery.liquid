@@ -351,7 +351,7 @@
 
       {% if render_mobile_slideshow_controls %}
         {%- render 'slideshow-controls',
-          class: 'desktop:hidden media-gallery__mobile-controls',
+          class: 'media-gallery__mobile-controls',
           style: block_settings.slideshow_mobile_controls_style,
           item_count: sorted_media.size,
           controls_on_media: true,
@@ -363,7 +363,7 @@
 
   {% if render_slideshow_arrows %}
     {% capture slideshow_arrows %}
-      {% render 'slideshow-arrows', class: 'mobile:hidden', icon_style: block_settings.icons_style %}
+      {% render 'slideshow-arrows', class: 'mobile:hidden', icon_style: block_settings.icons_style, icon_shape: settings.icons_shape %}
     {% endcapture %}
   {% endif %}
 

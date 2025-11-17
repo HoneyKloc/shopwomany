@@ -220,7 +220,7 @@
   }
 
   .email-signup__button-icon {
-    color: currentcolor;
+    fill: currentcolor;
     padding: 5px;
 
     @media screen and (max-width: 749px) {
@@ -359,13 +359,6 @@
       "default": true
     },
     {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "t:settings.color_scheme",
-      "default": "primary",
-      "visible_if": "{{ block.settings.inherit_color_scheme == false }}"
-    },
-    {
       "type": "header",
       "content": "t:content.heading"
     },
@@ -414,6 +407,13 @@
       ],
       "default": "h3",
       "info": "t:info.edit_presets_in_theme_settings"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "primary",
+      "visible_if": "{{ block.settings.inherit_color_scheme == false }}"
     },
     {
       "type": "header",

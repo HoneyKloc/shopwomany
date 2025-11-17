@@ -1,0 +1,18 @@
+<div class="quick-atc">
+{% render 'collection-atc', product: closest.product, section_id: section.id %}
+</div>
+{% schema %} 
+{
+  "name": "quick add to cart",
+  "tag": null,
+  "settings": [
+    
+  ],
+  "presets": [
+    {
+      "name": "quick add to cart",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}

@@ -24,10 +24,7 @@
   <button
     class="button header-actions__action button-unstyled"
     on:click="/open"
-    aria-haspopup="dialog"
-    aria-label="{{ 'accessibility.cart' | t }}"
-    aria-describedby="cart-bubble-text"
-    data-testid="cart-drawer-trigger"
+    aria-label="{{ 'accessibility.open_cart_drawer' | t }} {{ 'accessibility.cart_count' | t}}: {{ cart.item_count }}"
   >
     {% render 'cart-icon-component' %}
   </button>
@@ -35,7 +32,6 @@
   <dialog
     ref="dialog"
     class="cart-drawer__dialog dialog-modal dialog-drawer color-{{ settings.drawer_color_scheme }}{% if cart.empty? %} cart-drawer--empty{%endif%}"
-    aria-labelledby="{% if cart.empty? %}cart-drawer-heading-empty{% else %}cart-drawer-heading{% endif %}"
     scroll-lock
   >
     <div class="cart-drawer__inner">
@@ -61,12 +57,9 @@
             class="cart-drawer__content motion-reduce"
             aria-label="{{ 'accessibility.cart' | t }}"
           >
-            <h2
-              class="cart-drawer__heading h3 cart-drawer__heading--empty"
-              id="cart-drawer-heading-empty"
-            >
+            <span class="cart-drawer__heading h3 cart-drawer__heading--empty">
               {{ 'content.your_cart_is_empty' | t }}
-            </h2>
+            </span>
 
             <div class="cart-drawer__items">
               {% render 'cart-products' %}
@@ -77,13 +70,10 @@
             class="cart-drawer__header"
             id="cart-drawer-header"
           >
-            <h2
-              class="cart-drawer__heading h3"
-              id="cart-drawer-heading"
-            >
+            <span class="cart-drawer__heading h3">
               {{ 'content.cart_title' | t }}
               {% render 'cart-bubble' %}
-            </h2>
+            </span>
 
             <button
               ref="closeButton"

@@ -1,0 +1,623 @@
+{% doc %}
+  @prompt
+    social share popup 
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-social-share-{{ ai_gen_id }} {
+    position: relative;
+    display: flex;
+    margin-left: auto;
+  }
+
+  .ai-social-share-trigger-{{ ai_gen_id }} {
+    padding: 12px;
+    background-color: {{ block.settings.button_background }};
+    color: {{ block.settings.button_text_color }};
+    border: {{ block.settings.button_border_width }}px solid {{ block.settings.button_border }};
+    border-radius: {{ block.settings.button_border_radius }}px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ai-social-share-trigger-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.button_hover_background }};
+    color: {{ block.settings.button_hover_text }};
+    border-color: {{ block.settings.button_hover_border }};
+  }
+
+  .ai-social-share-trigger-{{ ai_gen_id }} svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .ai-social-share-overlay-{{ ai_gen_id }} {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  .ai-social-share-overlay-{{ ai_gen_id }}.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .ai-social-share-popup-{{ ai_gen_id }} {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    background-color: {{ block.settings.popup_background }};
+    border-radius: {{ block.settings.popup_border_radius }}px;
+    padding: 32px;
+    max-width: 500px;
+    width: 90%;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  }
+
+  .ai-social-share-popup-{{ ai_gen_id }}.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .ai-social-share-header-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .ai-social-share-title-{{ ai_gen_id }} {
+    font-size: 20px;
+    font-weight: 600;
+    color: {{ block.settings.popup_text_color }};
+    margin: 0;
+  }
+
+  .ai-social-share-close-{{ ai_gen_id }} {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    color: {{ block.settings.popup_text_color }};
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+  }
+
+  .ai-social-share-close-{{ ai_gen_id }}:hover {
+    opacity: 1;
+  }
+
+  .ai-social-share-close-{{ ai_gen_id }} svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .ai-social-share-platforms-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .ai-social-share-platform-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 16px;
+    background-color: {{ block.settings.platform_background }};
+    border: 1px solid {{ block.settings.platform_border }};
+    border-radius: {{ block.settings.platform_border_radius }}px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+  }
+
+  .ai-social-share-platform-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.platform_hover_background }};
+    transform: translateY(-2px);
+  }
+
+  .ai-social-share-platform-icon-{{ ai_gen_id }} {
+    width: 32px;
+    height: 32px;
+  }
+
+  .ai-social-share-platform-name-{{ ai_gen_id }} {
+    font-size: 12px;
+    color: {{ block.settings.popup_text_color }};
+    font-weight: 500;
+  }
+
+  .ai-social-share-link-container-{{ ai_gen_id }} {
+    display: flex;
+    gap: 8px;
+    padding: 12px;
+    background-color: {{ block.settings.link_background }};
+    border: 1px solid {{ block.settings.platform_border }};
+    border-radius: {{ block.settings.platform_border_radius }}px;
+  }
+
+  .ai-social-share-link-input-{{ ai_gen_id }} {
+    flex: 1;
+    border: none;
+    background: none;
+    color: {{ block.settings.popup_text_color }};
+    font-size: 14px;
+    outline: none;
+  }
+
+  .ai-social-share-copy-btn-{{ ai_gen_id }} {
+    padding: 8px 16px;
+    background-color: {{ block.settings.copy_button_background }};
+    color: {{ block.settings.copy_button_text }};
+    border: none;
+    border-radius: {{ block.settings.platform_border_radius }}px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .ai-social-share-copy-btn-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.copy_button_hover_background }};
+  }
+
+  .ai-social-share-copy-btn-{{ ai_gen_id }}.copied {
+    background-color: #008060;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-social-share-popup-{{ ai_gen_id }} {
+      padding: 24px;
+    }
+
+    .ai-social-share-platforms-{{ ai_gen_id }} {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .ai-social-share-platform-{{ ai_gen_id }} {
+      padding: 12px;
+    }
+  }
+{% endstyle %}
+
+<social-share-popup-{{ ai_gen_id }} class="ai-social-share-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <button class="ai-social-share-trigger-{{ ai_gen_id }}" aria-label="Share this page">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="18" cy="5" r="3"></circle>
+      <circle cx="6" cy="12" r="3"></circle>
+      <circle cx="18" cy="19" r="3"></circle>
+      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+    </svg>
+    {{ block.settings.button_label }}
+  </button>
+
+  <div class="ai-social-share-overlay-{{ ai_gen_id }}"></div>
+
+  <div class="ai-social-share-popup-{{ ai_gen_id }}">
+    <div class="ai-social-share-header-{{ ai_gen_id }}">
+      <h3 class="ai-social-share-title-{{ ai_gen_id }}">{{ block.settings.popup_title }}</h3>
+      <button class="ai-social-share-close-{{ ai_gen_id }}" aria-label="Close">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <div class="ai-social-share-platforms-{{ ai_gen_id }}">
+      {% if block.settings.show_facebook %}
+        <a
+          href="#"
+          class="ai-social-share-platform-{{ ai_gen_id }}"
+          data-platform="facebook"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg class="ai-social-share-platform-icon-{{ ai_gen_id }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#1877F2">
+            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+          </svg>
+          <span class="ai-social-share-platform-name-{{ ai_gen_id }}">Facebook</span>
+        </a>
+      {% endif %}
+
+      {% if block.settings.show_twitter %}
+        <a
+          href="#"
+          class="ai-social-share-platform-{{ ai_gen_id }}"
+          data-platform="twitter"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg class="ai-social-share-platform-icon-{{ ai_gen_id }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#000000">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+          <span class="ai-social-share-platform-name-{{ ai_gen_id }}">X</span>
+        </a>
+      {% endif %}
+
+      {% if block.settings.show_pinterest %}
+        <a
+          href="#"
+          class="ai-social-share-platform-{{ ai_gen_id }}"
+          data-platform="pinterest"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg class="ai-social-share-platform-icon-{{ ai_gen_id }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#E60023">
+            <path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/>
+          </svg>
+          <span class="ai-social-share-platform-name-{{ ai_gen_id }}">Pinterest</span>
+        </a>
+      {% endif %}
+
+      {% if block.settings.show_whatsapp %}
+        <a
+          href="#"
+          class="ai-social-share-platform-{{ ai_gen_id }}"
+          data-platform="whatsapp"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg class="ai-social-share-platform-icon-{{ ai_gen_id }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#25D366">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+          </svg>
+          <span class="ai-social-share-platform-name-{{ ai_gen_id }}">WhatsApp</span>
+        </a>
+      {% endif %}
+
+      {% if block.settings.show_email %}
+        <a
+          href="#"
+          class="ai-social-share-platform-{{ ai_gen_id }}"
+          data-platform="email"
+        >
+          <svg class="ai-social-share-platform-icon-{{ ai_gen_id }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+            <polyline points="22,6 12,13 2,6"></polyline>
+          </svg>
+          <span class="ai-social-share-platform-name-{{ ai_gen_id }}">Email</span>
+        </a>
+      {% endif %}
+    </div>
+
+    <div class="ai-social-share-link-container-{{ ai_gen_id }}">
+      <input
+        type="text"
+        class="ai-social-share-link-input-{{ ai_gen_id }}"
+        readonly
+        aria-label="Page URL"
+      >
+      <button class="ai-social-share-copy-btn-{{ ai_gen_id }}" aria-label="Copy link">
+        Copy
+      </button>
+    </div>
+  </div>
+</social-share-popup-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class SocialSharePopup{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.trigger = this.querySelector('.ai-social-share-trigger-{{ ai_gen_id }}');
+        this.overlay = this.querySelector('.ai-social-share-overlay-{{ ai_gen_id }}');
+        this.popup = this.querySelector('.ai-social-share-popup-{{ ai_gen_id }}');
+        this.closeBtn = this.querySelector('.ai-social-share-close-{{ ai_gen_id }}');
+        this.copyBtn = this.querySelector('.ai-social-share-copy-btn-{{ ai_gen_id }}');
+        this.linkInput = this.querySelector('.ai-social-share-link-input-{{ ai_gen_id }}');
+        this.platforms = this.querySelectorAll('.ai-social-share-platform-{{ ai_gen_id }}');
+      }
+
+      connectedCallback() {
+        this.linkInput.value = window.location.href;
+        this.setupEventListeners();
+      }
+
+      setupEventListeners() {
+        this.trigger.addEventListener('click', () => this.openPopup());
+        this.closeBtn.addEventListener('click', () => this.closePopup());
+        this.overlay.addEventListener('click', () => this.closePopup());
+        this.copyBtn.addEventListener('click', () => this.copyLink());
+
+        this.platforms.forEach(platform => {
+          platform.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.share(platform.dataset.platform);
+          });
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && this.popup.classList.contains('active')) {
+            this.closePopup();
+          }
+        });
+      }
+
+      openPopup() {
+        this.overlay.classList.add('active');
+        this.popup.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      closePopup() {
+        this.overlay.classList.remove('active');
+        this.popup.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      copyLink() {
+        this.linkInput.select();
+        this.linkInput.setSelectionRange(0, 99999);
+        navigator.clipboard.writeText(this.linkInput.value);
+
+        const originalText = this.copyBtn.textContent;
+        this.copyBtn.textContent = 'Copied!';
+        this.copyBtn.classList.add('copied');
+
+        setTimeout(() => {
+          this.copyBtn.textContent = originalText;
+          this.copyBtn.classList.remove('copied');
+        }, 2000);
+      }
+
+      share(platform) {
+        const url = encodeURIComponent(window.location.href);
+        const title = encodeURIComponent(document.title);
+        let shareUrl = '';
+
+        switch(platform) {
+          case 'facebook':
+            shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+            break;
+          case 'twitter':
+            shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${title}`;
+            break;
+          case 'pinterest':
+            const image = document.querySelector('meta[property="og:image"]');
+            const imageUrl = image ? encodeURIComponent(image.content) : '';
+            shareUrl = `https://pinterest.com/pin/create/button/?url=${url}&description=${title}&media=${imageUrl}`;
+            break;
+          case 'whatsapp':
+            shareUrl = `https://wa.me/?text=${title}%20${url}`;
+            break;
+          case 'email':
+            shareUrl = `mailto:?subject=${title}&body=${url}`;
+            window.location.href = shareUrl;
+            return;
+        }
+
+        if (shareUrl) {
+          window.open(shareUrl, '_blank', 'width=600,height=400');
+        }
+      }
+    }
+
+    customElements.define('social-share-popup-{{ ai_gen_id }}', SocialSharePopup{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Social share popup",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button text",
+      "default": "Share"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Background",
+      "default": "#c50984"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_border",
+      "label": "Border",
+      "default": "#c50984"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_background",
+      "label": "Hover background",
+      "default": "#030302"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_text",
+      "label": "Hover text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_border",
+      "label": "Hover border",
+      "default": "#030302"
+    },
+    {
+      "type": "range",
+      "id": "button_border_width",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "label": "Border width",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 25
+    },
+    {
+      "type": "header",
+      "content": "Popup"
+    },
+    {
+      "type": "text",
+      "id": "popup_title",
+      "label": "Title",
+      "default": "Share this page"
+    },
+    {
+      "type": "color",
+      "id": "popup_background",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "popup_text_color",
+      "label": "Text",
+      "default": "#030302"
+    },
+    {
+      "type": "range",
+      "id": "popup_border_radius",
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Platforms"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_facebook",
+      "label": "Facebook",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_twitter",
+      "label": "X (Twitter)",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_pinterest",
+      "label": "Pinterest",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_whatsapp",
+      "label": "WhatsApp",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_email",
+      "label": "Email",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "platform_background",
+      "label": "Platform background",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "color",
+      "id": "platform_hover_background",
+      "label": "Platform hover background",
+      "default": "#ebe9e2"
+    },
+    {
+      "type": "color",
+      "id": "platform_border",
+      "label": "Platform border",
+      "default": "#e6e6e6"
+    },
+    {
+      "type": "range",
+      "id": "platform_border_radius",
+      "min": 0,
+      "max": 16,
+      "step": 2,
+      "unit": "px",
+      "label": "Platform border radius",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Copy link"
+    },
+    {
+      "type": "color",
+      "id": "link_background",
+      "label": "Link background",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "color",
+      "id": "copy_button_background",
+      "label": "Copy button background",
+      "default": "#c50984"
+    },
+    {
+      "type": "color",
+      "id": "copy_button_text",
+      "label": "Copy button text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "copy_button_hover_background",
+      "label": "Copy button hover background",
+      "default": "#030302"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Social share popup"
+    }
+  ]
+}
+{% endschema %}

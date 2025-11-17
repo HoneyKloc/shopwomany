@@ -71,8 +71,6 @@ class HeaderDrawer extends Component {
     if (!summary) return;
 
     summary.setAttribute('aria-expanded', 'true');
-
-    this.preventInitialAccordionAnimations(details);
     requestAnimationFrame(() => {
       details.classList.add('menu-open');
       setTimeout(() => {
@@ -111,9 +109,10 @@ class HeaderDrawer extends Component {
 
     onAnimationEnd(details, () => {
       reset(details);
+
       if (details === this.refs.details) {
         removeTrapFocus();
-        const openDetails = this.querySelectorAll('details[open]:not(accordion-custom > details)');
+        const openDetails = this.querySelectorAll('details[open]');
         openDetails.forEach(reset);
       } else {
         setTimeout(() => {
@@ -142,29 +141,6 @@ class HeaderDrawer extends Component {
     allAnimated.forEach((element) => {
       element.addEventListener('animationend', removeWillChangeOnAnimationEnd);
     });
-  }
-
-  /**
-   * Temporarily disables accordion animations to prevent unwanted transitions when the drawer opens.
-   * Adds a no-animation class to accordion content elements, then removes it after 100ms to
-   * re-enable animations for user interactions.
-   * @param {HTMLDetailsElement} details - The details element containing the accordions
-   */
-  preventInitialAccordionAnimations(details) {
-    const content = details.querySelectorAll('accordion-custom .details-content');
-
-    content.forEach((element) => {
-      if (element instanceof HTMLElement) {
-        element.classList.add('details-content--no-animation');
-      }
-    });
-    setTimeout(() => {
-      content.forEach((element) => {
-        if (element instanceof HTMLElement) {
-          element.classList.remove('details-content--no-animation');
-        }
-      });
-    }, 100);
   }
 }
 

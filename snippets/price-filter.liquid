@@ -18,10 +18,10 @@
   {% endif %}
 
   open-by-default-on-mobile
-  {% if filter_style == 'vertical' %}
+  {% comment %} {% if filter_style == 'vertical' %}
     open
     open-by-default-on-desktop
-  {% endif %}
+  {% endif %} {% endcomment %}
 >
   <details
     class="facets__panel"
@@ -56,8 +56,8 @@
           {%- endif -%}
         </span>
       </facet-status-component>
-      <span class="svg-wrapper icon-caret icon-animated">
-        {{- 'icon-caret.svg' | inline_asset_content -}}
+      <span class="svg-wrapper icon-plus icon-animated">
+        {{- 'icon-plus.svg' | inline_asset_content -}}
       </span>
     </summary>
     <floating-panel-component

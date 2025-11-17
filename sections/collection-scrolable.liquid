@@ -1,0 +1,331 @@
+
+ {% schema %}
+{
+  "name": "Scrollable Collection",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "left_image",
+      "label": "Left Side Image"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Featured Collection"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Discover our latest styles and bestsellers"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Select Collection"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Scrollable Collection",
+      "category": "Collection"
+    }
+  ]
+}
+{% endschema %}
+
+{% liquid
+  assign collection = collections[section.settings.collection]
+%}
+
+<section class="featured-collection-vertical">
+  <div class="featured-half-wrapper">
+    <!-- Left side -->
+    <div class="featured-left">
+      {% if section.settings.left_image %}
+        <div class="featured-left-images">
+          <img src="{{ section.settings.left_image | image_url: width: 800 }}" alt="{{ section.settings.heading | escape }}">
+        </div>
+      {% endif %}
+
+      <div class="featured-left-content">
+        {% if section.settings.heading %}
+          <h3>{{ section.settings.heading }}</h3>
+        {% endif %}
+        {% if section.settings.subheading %}
+          <p>{{ section.settings.subheading }}</p>
+        {% endif %}
+        {% if section.settings.button_text and section.settings.button_link %}
+          <a href="{{ section.settings.button_link }}" class="button">{{ section.settings.button_text }}</a>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Right side -->
+    <div class="featured-right">
+      {% if collection.products_count > 0 %}
+        <div class="product-grid-scroll">
+          {% for product in collection.products limit: 8 %}
+            <div class="product-card">
+              <a href="{{ product.url }}" class="product-card-link">
+                <div class="product-image">
+                  {% if product.featured_image %}
+                    <img src="{{ product.featured_image | image_url: width: 400 }}" alt="{{ product.featured_image.alt | escape }}">
+                  {% endif %}
+                  <div style=“text-align: end;“>
+                    {% render 'hulkapps-wishlist-collection-btn', productId: product.id, variantId: product.selected_or_first_available_variant.id %}
+                  </div>
+                </div>
+                <div class="product-info">
+                  <p class="product-title">{{ product.title }}</p>
+                  <span class="price">{{ product.price | money }}</span>
+                  <div class="quick-atc">
+                    {% render 'collection-atc', product: product %}
+                  </div>
+                </div>
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p>No products found in this collection.</p>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<style>
+.featured-collection-vertical {
+    width: 100%;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    border-top: 1px solid #47474733;
+    border-bottom: 1px solid #47474733;
+}
+
+.featured-half-wrapper {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    align-items: start;
+    width: 100%;
+    max-width: 1520px;
+    gap: 0;
+}
+
+/* Left side */
+.featured-left {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border-right: 1px solid #47474733;
+    height: 100%;
+}
+.featured-left-images {
+    padding: 25px 35px;
+}
+.featured-left-images img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.featured-left-content {
+  margin-top: 1.5rem;
+  max-width: 80%;
+}
+
+.featured-left-content h3 {
+font-family: 'Montserrat' !important;
+font-weight: 600;
+font-size: 20px;
+line-height: 36px;
+text-transform: uppercase;
+color: #474747;
+}
+
+.featured-left-content p {
+font-family: 'Montserrat' !important;
+font-weight: 500;
+font-size: 16px;
+line-height: 24px;
+text-align: center;
+color: #474747;
+}
+
+
+.featured-left-content .button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    --button-border-width: 0;
+    padding: 0;
+    text-decoration: none;
+    border-color: #C50984;
+    border: 1px solid #C50984;
+    width: 150px;
+    height: 40px;
+    border-radius: 50px;
+    border-width: 1px;
+    font-family: 'Montserrat';
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+    transition: all 0.125s ease-in-out;
+}
+.featured-left-content .button:hover {
+    background: #c50984;
+    color: #fff;
+    transition: 0.125s ease-in-out;
+}
+
+/* Right side (Vertically scrollable grid) */
+.featured-right {
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  height: 1000px;
+  padding: 0;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+.featured-right::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+.featured-right .product-grid-scroll {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+}
+.featured-right .product-grid-scroll .product-card {
+    border-right: 1px solid #47474733;
+    border-bottom: 1px solid #47474733;
+    border-radius: 0;
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+.featured-right .product-grid-scroll .product-card {
+  background: var(--color-background-card);
+  border-radius: 0px;
+  overflow: hidden;
+  scroll-snap-align: start;
+}
+.featured-right .product-grid-scroll .product-card:nth-child(odd) {
+    padding-left: 60px;
+    padding-right: 25px;
+}
+.featured-right .product-grid-scroll .product-card:nth-child(even) {
+    padding-left: 25px;
+    padding-right: 60px;
+}
+
+.featured-right .product-grid-scroll .product-card .product-card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+
+.featured-right .product-grid-scroll .product-card .product-image img {
+    width: 100%;
+    object-fit: cover;
+    display: block;
+    height: 100%;
+    max-height: 400px;
+    aspect-ratio: 2 / 3;
+    border-radius: 10px;
+    object-position: top;
+}
+.featured-right .product-grid-scroll .product-image {
+    position: relative;
+}
+.featured-right .product-grid-scroll .product-card .product-info {
+  padding: 0.75rem;
+ 
+}
+
+.featured-right .product-grid-scroll .product-card .product-info h3 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+.featured-collection-vertical .featured-right .product-card .product-info {
+    position: relative;
+    margin: 0.75rem 0;
+    padding: 0;
+}
+
+
+@media screen and (min-width:1440px){
+.featured-left-content p {
+  font-size: 20px;
+  line-height: 30px;
+  }
+  .featured-left-content h3 {
+font-size: 22px;
+line-height: 40px;
+}
+.featured-left-content .button {
+    width: 200px;
+    height: 60px;
+    font-size: 18px;
+    line-height: 24px;
+}
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .featured-half-wrapper {
+    grid-template-columns: 100%;
+  }
+
+  .featured-left {
+    margin-bottom: 2rem;
+  }
+
+  .featured-right {
+    height: auto;
+    max-height: 500px;
+  }
+  .featured-right .product-grid-scroll .product-card .product-image img {
+    width: 100%;
+    object-fit: cover;
+    display: block;
+    height: 230px;
+    border-radius: 10px;
+  }
+  .featured-right .product-grid-scroll .product-card:nth-child(odd),
+  .featured-right .product-grid-scroll .product-card:nth-child(even) {
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+  .featured-right .product-grid-scroll .product-card .product-image img {
+    height: 100%;
+  }
+}
+
+@media screen and (max-width:750px){
+    .featured-right .product-grid-scroll .product-card:nth-child(odd),
+    .featured-right .product-grid-scroll .product-card:nth-child(even) {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+}
+
+</style>
+

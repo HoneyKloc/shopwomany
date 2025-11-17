@@ -41,7 +41,7 @@ const MORPH_OPTIONS = {
   },
   onBeforeUpdate(oldNode, newNode) {
     if (oldNode instanceof Element && newNode instanceof Element) {
-      const attributes = ['product-grid-view', 'data-current-checked', 'data-previous-checked'];
+      const attributes = ['product-grid-view'];
 
       for (const attribute of attributes) {
         const oldValue = oldNode.getAttribute(attribute);
@@ -53,12 +53,14 @@ const MORPH_OPTIONS = {
       }
 
       // Special case for elements that need to keep their style
-      const elements = ['floating-panel-component', 'fieldset.variant-option'];
+      const elements = ['floating-panel-component'];
       const ids = ['account-popover'];
 
       for (const element of elements) {
-        if (oldNode.matches(element) && newNode.matches(element)) {
+        const tagName = element.toUpperCase();
+        if (oldNode.tagName === tagName && newNode.tagName === tagName) {
           const oldStyle = oldNode.getAttribute('style');
+
           if (oldStyle) newNode.setAttribute('style', oldStyle);
         }
       }

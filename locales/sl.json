@@ -43,7 +43,7 @@
       "few": "Št. uporabljenih filtrov: {{ count }}",
       "two": "Št. uporabljenih filtrov: {{ count }}"
     },
-    "account": "Račun",
+    "account": "Odpri meni za račun",
     "cart": "Košarica",
     "cart_count": "Skupno število izdelkov v košarici",
     "menu": "Meni",
@@ -53,10 +53,12 @@
     "loading_product_recommendations": "Nalaganje priporočil za izdelke",
     "discount": "Uporabi kodo za popust",
     "discount_applied": "Uporabljena koda za popust: {{ code }}",
+    "open_cart_drawer": "Odpri košarico",
     "inventory_status": "Status zaloge",
     "pause_video": "Zaustavi videoposnetek",
     "find_country": "Poišči državo",
-    "localization_region_and_language": "Izbirnik za regijo in jezik",
+    "localization_region_and_language": "Odpri izbirnik za regijo in jezik",
+    "open_search_modal": "Odpri iskanje",
     "decrease_quantity": "Zmanjšaj količino",
     "increase_quantity": "Povečaj količino",
     "quantity": "Količina",
@@ -237,13 +239,7 @@
     "recipient_form_fields_hidden": "Polja obrazca prejemnika so zdaj skrita",
     "recipient_form_error": "Pri pošiljanju obrazca je prišlo do napake",
     "product_custom_property_character_count": "Uporabljeno št. znakov: {{ used_chars }}/{{ max_chars }}",
-    "terms_and_policies": "Pogoji in pravilniki",
-    "pagination": {
-      "nav_label": "Krmarjenje po straneh",
-      "previous": "Nazaj",
-      "next": "Naprej",
-      "page": "Stran {{ page }}"
-    }
+    "terms_and_policies": "Pogoji in pravilniki"
   },
   "gift_cards": {
     "issued": {
@@ -277,13 +273,7 @@
       "adding_to_cart": "Dodajanje ...",
       "add_to_cart_error": "Pri dodajanju v košarico je prišlo do napake",
       "sold_out": "Razprodano",
-      "unavailable": "Ni na voljo",
-      "quantity_error_max": "Ta artikel ima največ {{ maximum }}",
-      "quantity": "Količina",
-      "quantity_increments": "V korakih po {{ increment }}",
-      "quantity_minimum": "Najmanj od {{ minimum }}",
-      "quantity_maximum": "Največ od {{ maximum }}",
-      "in_cart": "v košarici"
+      "unavailable": "Ni na voljo"
     }
   },
   "fields": {

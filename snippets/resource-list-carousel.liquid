@@ -29,6 +29,16 @@
     %}
   {% endfor %}
 {% endcapture %}
+{% capture controls %}
+    {%- render 'slideshow-controls',
+      show_arrows: false,
+      arrows_on_media: true,
+      controls_on_media: true,
+      pagination_position: 'center',
+      style: 'dots', 
+      item_count: slide_count
+    -%}
+  {% endcapture %}
 
 {% if settings.icons_style != 'none' %}
   {% capture slideshow_arrows %}
@@ -50,6 +60,7 @@
   {% render 'slideshow',
     ref: slideshow_ref,
     class: 'resource-list__carousel',
+    controls: controls,
     slides: slides,
     slideshow_arrows: slideshow_arrows,
     auto_hide_controls: false,

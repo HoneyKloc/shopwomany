@@ -14,15 +14,24 @@
     assign search_style = 'modal'
   endif
 
-  if section.settings.enable_transparent_header_home and template.name == 'index'
+  if section.settings.enable_transparent_h_home and template.name == 'index'
     assign transparent = 'always'
     assign transparent_color_scheme = section.settings.home_color_scheme
-  elsif section.settings.enable_transparent_header_product and template.name == 'product'
+  elsif section.settings.enable_transparent_h_product and template.name == 'product'
     assign transparent = 'always'
     assign transparent_color_scheme = section.settings.product_color_scheme
-  elsif section.settings.enable_transparent_header_collection and template.name == 'collection'
+  elsif section.settings.enable_transparent_h_collection and template.name == 'collection'
     assign transparent = 'always'
     assign transparent_color_scheme = section.settings.collection_color_scheme
+  elsif section.settings.enable_transparent_h_lst_col and template.name == 'list-collections'
+    assign transparent = 'always'
+    assign transparent_color_scheme = section.settings.collection_color_scheme
+  elsif section.settings.enable_transparent_h_custom_page and template.name == 'page'
+    assign transparent = 'always'
+    assign transparent_color_scheme = section.settings.custom_page_color_scheme
+  elsif template.name == 'search'
+    assign transparent = 'always'
+    assign transparent_color_scheme = section.settings.custom_page_color_scheme
   endif
 
   if section.settings.enable_sticky_header == 'always'
@@ -94,7 +103,6 @@
   capture search
     render 'search', style: search_style, class: search_class
   endcapture
-
   # Skip mobile search under specific conditions:
   # Always render if search_row is bottom
   # Don't render when shop.customer_accounts_enabled is false and search_position is left and search_style is not none
@@ -197,9 +205,6 @@
   data-skip-node-update
   data-scroll-direction="none"
 >
-  {%- if request.page_type == 'index' -%}
-    <h1 class="visually-hidden">{{ shop.name }}</h1>
-  {%- endif -%}
   {% for row in rows %}
     {% liquid
       assign scheme = 'color_scheme_' | append: row
@@ -999,7 +1004,7 @@
       "id": "color_scheme_transparent",
       "label": "t:settings.inverse",
       "default": "primary",
-      "visible_if": "{{ section.settings.enable_transparent_header_home or section.settings.enable_transparent_header_product or section.settings.enable_transparent_header_collection }}"
+      "visible_if": "{{section.settings.enable_transparent_h_home or section.settings.enable_transparent_h_product or section.settings.enable_transparent_h_collection or section.settings.enable_transparent_h_lst_col  or section.settings.enable_transparent_h_custom_page}}"
     },
     {
       "type": "header",
@@ -1007,7 +1012,7 @@
     },
     {
       "type": "checkbox",
-      "id": "enable_transparent_header_home",
+      "id": "enable_transparent_h_home",
       "label": "t:settings.transparent_background",
       "default": false
     },
@@ -1026,7 +1031,7 @@
         }
       ],
       "default": "default",
-      "visible_if": "{{ section.settings.enable_transparent_header_home }}"
+      "visible_if": "{{ section.settings.enable_transparent_h_home }}"
     },
     {
       "type": "header",
@@ -1034,7 +1039,7 @@
     },
     {
       "type": "checkbox",
-      "id": "enable_transparent_header_product",
+      "id": "enable_transparent_h_product",
       "label": "t:settings.transparent_background",
       "default": false
     },
@@ -1053,7 +1058,7 @@
         }
       ],
       "default": "default",
-      "visible_if": "{{ section.settings.enable_transparent_header_product }}"
+      "visible_if": "{{ section.settings.enable_transparent_h_product }}"
     },
     {
       "type": "header",
@@ -1061,7 +1066,7 @@
     },
     {
       "type": "checkbox",
-      "id": "enable_transparent_header_collection",
+      "id": "enable_transparent_h_collection",
       "label": "t:settings.transparent_background",
       "default": false
     },
@@ -1080,7 +1085,61 @@
         }
       ],
       "default": "default",
-      "visible_if": "{{ section.settings.enable_transparent_header_collection }}"
+      "visible_if": "{{ section.settings.enable_transparent_h_collection }}"
+    },
+    {
+      "type": "header",
+      "content": "Collections List Page"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_transparent_h_lst_col",
+      "label": "t:settings.transparent_background",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "collections_list_color_scheme",
+      "label": "t:settings.color_scheme",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:options.default"
+        },
+        {
+          "value": "inverse",
+          "label": "t:options.inverse"
+        }
+      ],
+      "default": "default",
+      "visible_if": "{{ section.settings.enable_transparent_h_lst_col }}"
+    },
+    {
+      "type": "header",
+      "content": "Pages"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_transparent_h_custom_page",
+      "label": "t:settings.transparent_background",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "custom_page_color_scheme",
+      "label": "t:settings.color_scheme",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:options.default"
+        },
+        {
+          "value": "inverse",
+          "label": "t:options.inverse"
+        }
+      ],
+      "default": "default",
+      "visible_if": "{{ section.settings.enable_transparent_h_custom_page }}"
     }
   ],
   "presets": []

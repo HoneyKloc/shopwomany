@@ -39,7 +39,7 @@
   </div>
 
   <div
-    class="border-style custom-section-content"
+    class="{{ section.settings.class }} border-style custom-section-content"
     style="{% render 'border-override', settings: section.settings %}"
   >
     {% if section.settings.toggle_overlay %}
@@ -47,7 +47,7 @@
     {% endif %}
 
     <div
-      class="
+      class=" desk-mob
         spacing-style
         layout-panel-flex
         layout-panel-flex--{{ section.settings.content_direction }}

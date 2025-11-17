@@ -124,6 +124,16 @@
     margin-inline-start: auto;
   }
 {% endstylesheet %}
+{% if template == "product" %}
+  <style>
+    announcement-bar-component.announcement-bar__slider {
+      background: #474747;
+      border: 2px solid #bdd700;
+      border-radius: 15px;
+      min-height: 60px;
+    }
+  </style>
+{% endif %}
 
 {% schema %}
 {

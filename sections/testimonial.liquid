@@ -1,0 +1,184 @@
+{% schema %}
+{
+  "name": "Testimonials Carousel",
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_heading",
+      "label": "Section Heading",
+      "default": "What Our Customers Say"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author Name"
+        },
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Testimonial Quote"
+        },
+        {
+          "type": "number",
+          "id": "rating",
+          "label": "Star Rating (1-5)",
+          "default": 5
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials Carousel",
+      "category": "Section"
+    }
+  ]
+}
+{% endschema %}
+
+<div class="testimonials-section">
+  <h2 class="section-heading">{{ section.settings.section_heading }}</h2>
+
+  <!-- Swiper -->
+  <div class="swiper testimonials-swiper">
+    <div class="swiper-wrapper">
+      {% for block in section.blocks %}
+        <div class="swiper-slide testimonial-card">
+                 <p class="testimonial-rating">
+  {% for i in (1..block.settings.rating) %}
+    ★
+  {% endfor %}
+  {% assign empty_stars = 5 | minus: block.settings.rating %}
+  {% for i in (1..empty_stars) %}
+    ☆
+  {% endfor %}
+</p>
+          <p class="testimonial-quote">{{ block.settings.quote }}</p>
+          <p class="testimonial-author">- {{ block.settings.author }}</p>
+     
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- Navigation -->
+    {% comment %} <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div> {% endcomment %}
+    <div class="swiper-pagination"></div>
+  </div>
+</div>
+
+<style>
+   .testimonial-quote {
+  position: relative;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.6;
+  text-align: left; /* optional */
+}
+p.testimonial-quote {
+    width: 50%;
+    margin: 0 auto;
+    font-size: 18px;
+    text-align: center;
+    padding-bottom: 17px;
+}
+.testimonial-quote::before {
+  content: '';
+  position: absolute;
+  top: 0; /* adjust to align vertically with first letter */
+  left: -5px; /* adjust horizontal position */
+  width: 34px; /* SVG width */
+  height: 31px; /* SVG height */
+  background: url('data:image/svg+xml;utf8,<svg width="34" height="31" viewBox="0 0 34 31" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.56425 15.8855C10.6341 14.5726 14.4413 16.8045 14.4413 22.581C14.4413 27.5698 11.2905 30.1955 7.35196 30.1955C2.49441 30.1955 0 26.1257 0 19.9553C0 12.9972 2.88827 1.83799 13.1285 0V6.56424C9.05866 7.48324 6.56425 11.0279 6.56425 15.8855ZM25.8631 15.8855C29.933 14.5726 33.7402 16.8045 33.7402 22.581C33.7402 27.5698 30.5894 30.1955 26.6508 30.1955C21.7933 30.1955 19.2989 26.1257 19.2989 19.9553C19.2989 12.9972 22.1872 1.83799 32.4274 0V6.56424C28.3575 7.48324 25.8631 11.0279 25.8631 15.8855Z" fill="%23181818" fill-opacity="0.1"/></svg>') no-repeat;
+  background-size: contain;
+  z-index: 0;
+  pointer-events: none;
+}
+
+
+.testimonials-section {
+  text-align: center;
+  padding: 60px 20px;
+  
+}
+
+.testimonials-section .section-heading {
+      font-size: 32px;
+    color: #c6007f;
+}
+
+.testimonial-card {
+  
+  padding: 30px;
+  text-align: center;
+}
+
+.testimonial-quote {
+  font-style: italic;
+  margin-bottom: 15px;
+  font-size: 16px;
+}
+
+.testimonial-author {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.testimonial-rating {
+  color: #C6007F;
+  font-size: 18px;
+}
+.testimonials-section .swiper-pagination {
+    bottom: -5px !important;
+}
+.testimonials-section .swiper-pagination span.swiper-pagination-bullet {
+    width: 8px;
+    height: 8px;
+    background: #a7a6a3;
+    opacity: 1;
+}
+.testimonials-section .swiper-pagination span.swiper-pagination-bullet-active {
+    background: #3d3c38;
+}
+</style>
+
+<!-- Swiper JS -->
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  new Swiper('.testimonials-swiper', {
+    slidesPerView: 1,
+    spaceBetween: 20,
+    loop: true,
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+    },
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+    breakpoints: {
+      768: {
+        slidesPerView: 1,
+        spaceBetween: 30,
+      },
+      1024: {
+        slidesPerView: 1,
+        spaceBetween: 40,
+      },
+    },
+  });
+});
+</script>

@@ -1,0 +1,185 @@
+<div class="sale-countdown-section" style="background-image: url('{{ section.settings.background_image | img_url: ''}}');
+    height: 500px;
+    width: 97%;
+    margin: 0 auto;">
+  <div class="sale-content" style="text-align: {{ section.settings.text_alignment }};">
+    {% if section.settings.sale_label != blank %}
+      <span class="sale-label">{{ section.settings.sale_label }}</span>
+    {% endif %}
+    
+    <h2 class="sale-timer" id="countdown-timer-{{ section.id }}">00:00:00</h2>
+    
+    {% if section.settings.sale_description != blank %}
+      <p class="sale-description">{{ section.settings.sale_description }}</p>
+    {% endif %}
+    
+    {% if section.settings.button_text != blank %}
+      <a href="{{ section.settings.button_link }}" class="sale-button">{{ section.settings.button_text }}</a>
+    {% endif %}
+  </div>
+
+  {% if section.settings.product_image != blank %}
+    <div class="sale-image">
+      <img src="{{ section.settings.product_image | asset_url }}" alt="{{ section.settings.sale_label }}">
+    </div>
+  {% endif %}
+</div>
+
+<style>
+.sale-countdown-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-size: cover;
+  background-position: center;
+  padding: 60px;
+  border-radius: 12px;
+  gap: 40px;
+}
+
+.sale-content {
+  max-width: 30%;
+}
+
+.sale-label {
+  font-family: 'TrajanPro', serif;
+  font-size: 35px;
+  color:rgb(0, 0, 0);
+  letter-spacing: 1px;
+  display: block;
+  margin-bottom: 12px;
+ 
+}
+
+.sale-timer {
+  font-family: 'TrajanPro', serif;
+  font-size: 80px;
+  color: #C50984;
+  margin: 0 0 16px 0;
+}
+
+.sale-description {
+  font-size: 18px;
+  color: #474747;
+  margin-bottom: 24px;
+}
+
+.sale-button {
+  {% comment %} display: inline-block;
+  padding: 10px 25px; {% endcomment %}
+  border: 1px solid #C50984;
+  {% comment %} border-radius: 25px; {% endcomment %}
+  color: #c107a1;
+  {% comment %} text-decoration: none;
+  font-weight: unset;
+  transition: all 0.3s ease; {% endcomment %}
+}
+
+.sale-button:hover {
+  background-color: #c107a1;
+  color: #fff;
+}
+
+.sale-image img {
+  max-width: 400px;
+  border-radius: 12px;
+}
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const timerId = "countdown-timer-{{ section.id }}";
+    const countdownEl = document.getElementById(timerId);
+
+    if (!countdownEl) return;
+
+    // Parse the sale end date from section settings
+    const countdownDate = new Date("{{ section.settings.sale_end_date }}").getTime();
+
+    const interval = setInterval(() => {
+      const now = new Date().getTime();
+      const distance = countdownDate - now;
+
+      if (distance <= 0) {
+        countdownEl.innerHTML = "SALE ENDED";
+        clearInterval(interval);
+        return;
+      }
+
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000*60*60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000*60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      countdownEl.innerHTML =
+        ("0" + hours).slice(-2) + ":" +
+        ("0" + minutes).slice(-2) + ":" +
+        ("0" + seconds).slice(-2);
+    }, 1000);
+  });
+</script>
+
+
+
+{% schema %}
+{
+  "name": "Sale Countdown Section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "text",
+      "id": "sale_label",
+      "label": "Sale Label",
+      "default": "FESTIVE SALE"
+    },
+    {
+      "type": "text",
+      "id": "sale_description",
+      "label": "Sale Description",
+      "default": "This versatile designer vase is designed as a container for your jewelry."
+    },
+    {
+      "type": "image_picker",
+      "id": "product_image",
+      "label": "Product Image"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "text",
+      "id": "sale_end_date",
+      "label": "Sale End Date",
+      "default": "2025-10-15T00:00:00"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sale Countdown",
+      "category": "Promotion"
+    }
+  ]
+}
+{% endschema %}

@@ -158,6 +158,7 @@ export class QuickAddComponent extends Component {
 
     if (isMobileBreakpoint()) {
       const productDetails = productGrid.querySelector('.product-details');
+      if (!productDetails) return;
       const productFormComponent = productGrid.querySelector('product-form-component');
       const variantPicker = productGrid.querySelector('variant-picker');
       const productPrice = productGrid.querySelector('product-price');
@@ -167,23 +168,17 @@ export class QuickAddComponent extends Component {
       // Make product title as a link to the product page
       productTitle.href = this.productPageUrl;
 
+      if (!productFormComponent || !variantPicker || !productPrice || !productTitle) return;
+
       const productHeader = document.createElement('div');
       productHeader.classList.add('product-header');
 
       productHeader.appendChild(productTitle);
-      if (productPrice) {
-        productHeader.appendChild(productPrice);
-      }
+      productHeader.appendChild(productPrice);
       productGrid.appendChild(productHeader);
-
-      if (variantPicker) {
-        productGrid.appendChild(variantPicker);
-      }
-      if (productFormComponent) {
-        productGrid.appendChild(productFormComponent);
-      }
-
-      productDetails?.remove();
+      productGrid.appendChild(variantPicker);
+      productGrid.appendChild(productFormComponent);
+      productDetails.remove();
     }
 
     morph(modalContent, productGrid);

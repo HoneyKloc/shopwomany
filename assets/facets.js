@@ -717,8 +717,6 @@ class FacetStatusComponent extends Component {
    */
   #updateBubbleSummary(checkedInputElements, checkedInputElementsCount) {
     const { facetStatus } = this.refs;
-    const filterStyle = this.dataset.filterStyle;
-
     facetStatus.classList.remove('bubble', 'facets__bubble');
 
     if (checkedInputElementsCount === 0) {
@@ -726,7 +724,7 @@ class FacetStatusComponent extends Component {
       return;
     }
 
-    if (filterStyle === 'horizontal' && checkedInputElementsCount === 1) {
+    if (checkedInputElementsCount === 1) {
       facetStatus.innerHTML = checkedInputElements[0]?.dataset.label ?? '';
       return;
     }
